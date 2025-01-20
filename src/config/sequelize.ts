@@ -1,9 +1,10 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 
-if (!process.env.DATABASE_URL) {
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is not defined');
 }
 
-const sequelize = new Sequelize(process.env?.DATABASE_URL);
+const sequelize = new Sequelize(databaseUrl);
 
-export default sequelize;
+export { sequelize, DataTypes };
