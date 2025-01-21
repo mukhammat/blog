@@ -1,5 +1,4 @@
-import express from "express";
-const app = express();
+import express from "express"; const app = express();
 import {config} from "dotenv"; config();
 import {sequelize} from "./config/sequelize";
 
