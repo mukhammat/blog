@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 
 import {create, destroy, upload} from "../controllers/post";
-import uploadMedia from "../utils/upload";
+import {uploadMedia} from "../utils/upload";
 import { authorize } from "../middleware/authorize"
 
 router.post("/create", authorize, create);
