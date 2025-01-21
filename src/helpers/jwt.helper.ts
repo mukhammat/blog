@@ -1,4 +1,3 @@
-
 import jwt, {JwtPayload} from "jsonwebtoken";
 
 const secretKey = process.env.SECRET_KEY || "secretKey";

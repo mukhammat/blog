@@ -1,20 +1,12 @@
 import express from "express"; const app = express();
-import {config} from "dotenv"; config();
-import {sequelize} from "./config/sequelize";
+import router from "./routers";
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "http://localhost";
+app.use(express.json());
+app.use("/api", router);
 
-console.log(process.env.PORT);
+const PORT = 3000;
+const HOST = "http://localhost";
 
-const start = async () => {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync();
-        app.listen(PORT, () => console.log(`Server is running on ${HOST}:${PORT}`));
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-start();
+app.listen(PORT, () => {
+  console.log(`Server is running on ${HOST}:${PORT}`);
+});
