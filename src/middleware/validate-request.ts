@@ -1,47 +1,25 @@
-import { validationResult } from "express-validator";
-import * as validations from "../validations";
-import { Request, Response,NextFunction } from "express";
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { Request, Response, NextFunction } from 'express';
+import asyncWrapper from "./async"
 
-type ValidationCategories = keyof typeof validations;
+export const validateRequest = (dtoClass: any) => {
+  return asyncWrapper(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      // Преобразуем тело запроса в экземпляр DTO
+      const dtoInstance = plainToInstance(dtoClass, req.body);
+      // Выполняем валидацию
+      const errors = await validate(dtoInstance);
 
-export const validate = (validationCategory: ValidationCategories) => {
-    const validationRules = validations[validationCategory];
+      if (errors.length > 0) {
+        // Форматируем ошибки
+        const errorMessages = errors.map(err => ({
+          property: err.property,
+          constraints: err.constraints,
+        }));
 
-    if (!validationRules) {
-        throw new Error(
-            `Validation rules for "${validationCategory}" not defined.`
-        );
-    }
-
-    return (validationRuleName: string) => {
-        const rules = validationRules[validationRuleName as keyof typeof validationRules];
-
-        if (!rules) {
-            throw new Error(
-                `Validation rules for "${validationRuleName}" not found in "${validationCategory}".`
-            );
-        }
-
-        if (!Array.isArray(rules)) {
-            throw new Error(
-                `Validation rules for "${validationRuleName}" should be an array of ValidationChain.`
-            );
-        }
-
-        return [
-            ...rules,
-            (req:Request, res:Response, next:NextFunction) => {
-                const errors = validationResult(req);
-
-                if (!errors.isEmpty()) {
-                    return res.status(400).json({
-                        success: false,
-                        errors: errors.array(),
-                    });
-                }
-
-                next();
-            },
-        ];
-    };
+        res.status(400).json({ errors: errorMessages });
+        return;
+      }
+      next();
+  });
 };

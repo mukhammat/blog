@@ -8,6 +8,6 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
         req.body.user = decode;
         next();
     } catch (error) {
-        res.status(403).json({ message: 'Нет доступа' });
+        res.status(401).json({ message: 'Нет доступа' });
     }
 }

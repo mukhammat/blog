@@ -20,7 +20,7 @@ const errorHanler: ErrorRequestHandler = (error, req, res, next) => {
                 break;
             case "P2025":
                 status = 404;
-                errorMessage = "Record to delete does not exist.";
+                errorMessage = "Resource not found";
                 break;
             default:
                 status = 500;
