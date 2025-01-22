@@ -3,7 +3,7 @@ import { isHttpError } from "http-errors";
 import { Prisma } from "@prisma/client";
 
 const errorHanler: ErrorRequestHandler = (error, req, res, next) => {
-    console.log(error);
+    
     let status = 500;
     let errorMessage = "Internal server error";
 
@@ -29,9 +29,7 @@ const errorHanler: ErrorRequestHandler = (error, req, res, next) => {
         }
     }
 
-    res.status(status).json({
-        message: errorMessage,
-    });
+    res.status(status).json({ message: errorMessage });
 };
 
 export default errorHanler;
