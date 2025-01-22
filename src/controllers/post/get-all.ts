@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import prisma from "../../config/prisma";
-import asyncWrapper from "../../middleware/async";
+import prisma from "../../configs/prisma";
+import asyncWrapper from "../../middlewares/async.middleware";
 
 export const getAll = asyncWrapper(async (req:Request, res:Response)=> {
     const posts = await prisma.post.findMany();

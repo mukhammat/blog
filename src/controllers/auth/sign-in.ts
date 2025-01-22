@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import prisma from "../../config/prisma";
-import asyncWrapper from "../../middleware/async";
-import { comparePassword } from '../../helpers/hash.helper';
-import { jwtGenerate } from '../../helpers/jwt.helper';
+import prisma from "../../configs/prisma";
+import asyncWrapper from "../../middlewares/async.middleware";
+import { comparePassword } from '../../utils/password-hash';
+import { jwtGenerate } from '../../utils/generate-jwt';
 
 export const signIn = asyncWrapper(async (req: Request, res: Response)=>{
     const {email, password} = req.body;

@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
-import prisma from "../../config/prisma";
-import asyncWrapper from "../../middleware/async";
+import prisma from "../../configs/prisma";
+import asyncWrapper from "../../middlewares/async.middleware";
 
 export const create = asyncWrapper(async (req: Request, res: Response) => {
-    const {message, userId} = req.body;
+    const {message} = req.body;
+
+    const userId = req.body?.user.id;
+    if(!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+    }
 
     await prisma.post.create({
         data: {

@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Request, Response, NextFunction } from 'express';
-import asyncWrapper from "./async"
+import asyncWrapper from "./async.middleware"
 
 export const validateRequest = (dtoClass: any) => {
   return asyncWrapper(async (req: Request, res: Response, next: NextFunction): Promise<void> => {

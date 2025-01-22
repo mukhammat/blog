@@ -3,7 +3,7 @@ const router = Router();
 
 import authRouter from "./auth.router";
 import postRouter from "./post.router";
-import errorHanler from "../middleware/error-handler";
+import errorHanler from "../middlewares/error-handler.middleware";
 
 router.use("/auth", authRouter);
 router.use("/post", postRouter);
