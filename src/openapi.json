@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/create": {
+    "/post/create": {
       "post": {
         "summary": "Create a new post",
         "tags": ["Posts"],
@@ -60,7 +60,7 @@
         }
       }
     },
-    "/delete/{id}": {
+    "/post/delete/{id}": {
       "delete": {
         "summary": "Delete a post by ID",
         "tags": ["Posts"],
@@ -98,7 +98,7 @@
         }
       }
     },
-    "/get-all": {
+    "/post/get-all": {
       "get": {
         "summary": "Retrieve all posts",
         "tags": ["Posts"],
@@ -138,7 +138,7 @@
         }
       }
     },
-    "/upload": {
+    "/post/upload": {
       "post": {
         "summary": "Upload media file",
         "tags": ["Media"],
@@ -176,7 +176,78 @@
         }
       }
     },
-    "/sign-in": {
+    "/post/get-media/{media_path}": {
+      "get": {
+        "summary": "Получение медиа-файла пользователя",
+        "tags": ["Media"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "media_path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Путь к медиа-файлу"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение медиа-файла",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка валидации",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid media path или User ID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурс не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "User not found",
+                        "Media not found", 
+                        "File not found on server"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in": {
       "post": {
         "summary": "User sign-in",
         "tags": ["Auth"],
@@ -236,7 +307,7 @@
         }
       }
     },
-    "/sign-up": {
+    "/auth/sign-up": {
       "post": {
         "summary": "User sign-up",
         "tags": ["Auth"],
