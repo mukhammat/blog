@@ -12,7 +12,7 @@ export const destroy = asyncWrapper(async (req: Request, res: Response) => {
     const {id} = req.params;
 
     // Проверка наличия и корректности id
-    if (typeof id !== 'number') {
+    if (!id) {
         return res.status(400).json({ message: 'Invalid ID.' });
     }
     
