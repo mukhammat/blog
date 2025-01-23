@@ -6,7 +6,7 @@ import { validateRequest } from "../middlewares/validate-request.middleware";
 import { SignInDto, SignUpDto } from "../dtos/auth.dto";
 
 
-router.post("/sign-in", validateRequest(SignInDto), signIn);
-router.post("/sign-up", validateRequest(SignUpDto), signUp);
+router.post("/signin", validateRequest(SignInDto), signIn);
+router.post("/signup", validateRequest(SignUpDto), signUp);
 
 export default router;

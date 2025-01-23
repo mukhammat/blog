@@ -1,31 +1,53 @@
-import { Request,Response } from "express";
+import { Request, Response } from "express";
 import asyncWrapper from "../../middlewares/async.middleware";
 import prisma from "../../configs/prisma";
 
+/**
+ * Контроллер для загрузки медиа-файлов
+ * @route POST /post/upload
+ * @param {Request} req - Экземпляр запроса Express
+ * @param {Response} res - Экземпляр ответа Express
+ */
 export const upload = asyncWrapper(async (req: Request, res: Response) => {
+    // Проверяем наличие файла в запросе
     if (!req.file) {
-        return res.status(400).send("Media upload error");
+        return res.status(400).json({ message: "Media upload error. No file provided." });
     }
 
-    const postId = req.body?.postId;
-    if (typeof postId !== 'number' || !postId) {
-        return res.status(400).json({ error: 'Invalid ID. It must be a string with a length between 1 and 255 characters.' });
+    // Получаем ID поста из тела запроса и проверяем его валидность
+    const postId = parseInt(req.body?.postId, 10);
+    if (!postId || isNaN(postId)) {
+        return res.status(400).json({ error: "Invalid post ID. It must be a valid number." });
     }
 
-    const userId = req.body?.user.id;
-    if(!userId) {
-        return res.status(400).json({ message: "User ID is required" });
+    // Получаем ID пользователя из тела запроса
+    const userId = req.body?.user?.id;
+    if (!userId) {
+        return res.status(400).json({ error: "User ID is required." });
     }
 
+    // Проверяем существование поста для указанного пользователя
+    const post = await prisma.post.findUnique({
+        where: {
+            id: postId,
+            userId,
+        },
+    });
+
+    if (!post) {
+        return res.status(404).json({ error: "Post not found or does not belong to the user." });
+    }
+
+    // Обновляем пост, добавляя ссылку на загруженный файл
     await prisma.post.update({
         data: {
-            media: req.file?.filename
+            media: req.file.filename,
         },
         where: {
             id: postId,
-            userId
-        }
-    })
+        },
+    });
 
-    res.send(`Media uploaded successfully: ${req.file.filename}`);
+    // Возвращаем успешный ответ с информацией о загруженном файле
+    return res.status(200).json({ message: "Media uploaded successfully.", filename: req.file.filename });
 });
