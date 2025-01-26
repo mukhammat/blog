@@ -4,9 +4,9 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js",
+    "start": "prisma generate && node dist/app.js",
     "dev": "nodemon --exec ts-node src/app.ts",
-    "build": "tsc -p ."
+    "build": "prisma generate && tsc -p ."
   },
   "author": "",
   "license": "ISC",
